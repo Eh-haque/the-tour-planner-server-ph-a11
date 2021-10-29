@@ -2,8 +2,6 @@ const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
-const req = require('express/lib/request');
-const res = require('express/lib/response');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,13 +19,7 @@ async function run() {
         // console.log('server connected');
         const database = client.db('assignment_11');
         const tourCollection = database.collection('tour_plan');
-        const orderCollection = database.collection('place_plan');
-
-        // add plans
-        app.post('/add_plan', async (req, res) => {
-            const result = await tourCollection.insertOne(req.body);
-            console.log(result);
-        })
+        const myOrderCollection = database.collection('my_orders');
 
         // get plans
         app.get('/add_plan', async (req, res) => {
@@ -35,18 +27,41 @@ async function run() {
             res.send(result)
         })
 
-        /* // get a plan
-        app.post('/add_plan/:id'), async (req, res) => {
+        // get a plan
+        app.get('/add_plan/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
-            console.log(id);
             const result = await tourCollection.findOne(query);
             res.send(result);
-        }
- */
-        // place order
-        app.post('/add_to_cart', async (req, res) => {
-            const result = await orderCollection.insertOne(req.body);
+        })
+
+        // post plans
+        app.post('/add_plan', async (req, res) => {
+            const result = await tourCollection.insertOne(req.body);
+            console.log(result);
+            res.send(result);
+        })
+
+
+        // delete a plan
+        app.delete('/add_plan/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await tourCollection.deleteOne(query);
+            console.log('delete', result);
+            res.send(result)
+        })
+
+
+         // place order
+         app.post('/my_orders', async (req, res) => {
+             const result = await myOrderCollection.insertOne(req.body);
+             res.send(result)
+         })
+
+        //  get orders
+        app.get('/my_orders', async(req, res)=>{
+            const result = await myOrderCollection.find({}).toArray();
             res.send(result)
         })
 
