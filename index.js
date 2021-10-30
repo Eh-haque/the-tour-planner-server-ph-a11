@@ -44,6 +44,26 @@ async function run() {
 
 
         // delete a plan
+        app.delete('/add_plan/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await tourCollection.deleteOne(query);
+            console.log('delete', result);
+            res.send(result)
+        })
+        // update a order status
+        app.put('/my_orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateUser = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = { $set: { "status": "Approved" } }
+            const result = await myOrderCollection.updateOne(filter, updateDoc, options)
+            console.log(result);
+            res.send(result)
+        })
+
+        // delete a order
         app.delete('/my_orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -53,14 +73,14 @@ async function run() {
         })
 
 
-         // place order
-         app.post('/my_orders', async (req, res) => {
-             const result = await myOrderCollection.insertOne(req.body);
-             res.send(result)
-         })
+        // place order
+        app.post('/my_orders', async (req, res) => {
+            const result = await myOrderCollection.insertOne(req.body);
+            res.send(result)
+        })
 
         //  get orders
-        app.get('/my_orders', async(req, res)=>{
+        app.get('/my_orders', async (req, res) => {
             const result = await myOrderCollection.find({}).toArray();
             res.send(result)
         })
