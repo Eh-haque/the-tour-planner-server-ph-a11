@@ -44,7 +44,7 @@ async function run() {
 
 
         // delete a plan
-        app.delete('/add_plan/:id', async (req, res) => {
+        app.delete('/my_orders/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await tourCollection.deleteOne(query);
