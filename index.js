@@ -42,7 +42,6 @@ async function run() {
             res.send(result);
         })
 
-
         // delete a plan
         app.delete('/add_plan/:id', async (req, res) => {
             const id = req.params.id;
@@ -71,7 +70,6 @@ async function run() {
             console.log('delete', result);
             res.send(result)
         })
-
 
         // place order
         app.post('/my_orders', async (req, res) => {
